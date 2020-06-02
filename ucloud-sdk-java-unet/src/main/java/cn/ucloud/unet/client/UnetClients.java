@@ -12,7 +12,7 @@ public abstract class UnetClients {
      * 根据公私钥创建默认实现
      * @param privateKey 私钥
      * @param publicKey 公钥
-     * @return
+     * @return {@link cn.ucloud.unet.client.UnetClient}实例
      */
     public static UnetClient getDefaultInstance(String privateKey,String publicKey){
         return new DefaultUnetClient(new UnetConfig(new Account(privateKey,publicKey)));
@@ -21,7 +21,7 @@ public abstract class UnetClients {
     /**
      * 根据指定Account创建默认实现
      * @param account {@link cn.ucloud.common.pojo.Account}对象
-     * @return
+     * @return {@link cn.ucloud.unet.client.UnetClient}实例
      */
     public static UnetClient getDefaultInstance(Account account){
         return new DefaultUnetClient(new UnetConfig(account));
@@ -30,7 +30,7 @@ public abstract class UnetClients {
     /**
      * 根据指定UnetConfig创建默认实现
      * @param unetConfig {@link cn.ucloud.unet.pojo.UnetConfig}对象
-     * @return
+     * @return {@link cn.ucloud.unet.client.UnetClient}实例
      */
     public static UnetClient getDefaultInstance(UnetConfig unetConfig){
         return new DefaultUnetClient(unetConfig);
