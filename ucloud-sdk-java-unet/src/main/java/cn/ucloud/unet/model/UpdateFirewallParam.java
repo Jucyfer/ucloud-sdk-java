@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @description: 更新防火墙
@@ -55,7 +56,7 @@ public class UpdateFirewallParam extends BaseRequestParam {
                     throw new ValidatorException(String.format(exceptionFormat, i, "protocol can not be empty"));
                 }
                 if (rule.getPort() == null || !rule.getPort().matches("^$|^[1-9][0-9]*$|^[1-9][0-9]*-[1-9][0-9]*$")) {
-                    throw new ValidatorException(String.format(exceptionFormat, i, "port can not be null or port illegal"));
+                    throw new ValidatorException(String.format(exceptionFormat, i, "illegal port"));
                 }
                 if (StringUtils.isBlank(rule.getIp())) {
                     throw new ValidatorException(String.format(exceptionFormat, i, "ip can not be empty"));
@@ -81,6 +82,26 @@ public class UpdateFirewallParam extends BaseRequestParam {
         this.rule = rule;
     }
 
+    public UpdateFirewallParam(String region, DescribeFirewallResult.FirewallData firewallData) {
+        super("UpdateFirewall");
+        this.region = region;
+        this.fwId = firewallData.getFwId();
+        this.rule = firewallData
+                .getRule()
+                .parallelStream()
+                .map(rule ->
+                        new Rule(
+                                rule.getProtocolType(),
+                                rule.getDstPort(),
+                                rule.getSrcIP(),
+                                rule.getRuleAction(),
+                                rule.getPiority(),
+                                rule.getRemark()
+                        )
+                )
+                .collect(Collectors.toList());
+    }
+
     public String getRegion() {
         return region;
     }
@@ -103,6 +124,14 @@ public class UpdateFirewallParam extends BaseRequestParam {
 
     public void setRule(List<Rule> rule) {
         this.rule = rule;
+    }
+
+    public void addRule(Rule rule){
+        this.rule.add(rule);
+    }
+
+    public void addRule(String protocol,String port,String ip,String action,String priority,String remark){
+        this.rule.add(new Rule(protocol,port,ip,action,priority,remark));
     }
 
     public static class Rule {
@@ -224,7 +253,7 @@ public class UpdateFirewallParam extends BaseRequestParam {
             this.priority = priority;
         }
 
-        public String getRemark(){
+        public String getRemark() {
             return remark;
         }
 

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @description: 创建防火墙  参数类
@@ -68,6 +69,9 @@ public class CreateFirewallParam extends BaseRequestParam {
                 if (StringUtils.isBlank(rule.getProtocol())) {
                     throw new ValidatorException(String.format(exceptionFormat, i, "protocol can not be empty"));
                 }
+                if (rule.getPort() == null || !rule.getPort().matches("^$|^[1-9][0-9]*$|^[1-9][0-9]*-[1-9][0-9]*$")) {
+                    throw new ValidatorException(String.format(exceptionFormat, i, "illegal port"));
+                }
                 if (StringUtils.isBlank(rule.getIp())) {
                     throw new ValidatorException(String.format(exceptionFormat, i, "ip can not be empty"));
                 }
@@ -91,6 +95,25 @@ public class CreateFirewallParam extends BaseRequestParam {
         this.region = region;
         this.rule = rule;
         this.name = name;
+    }
+
+    public CreateFirewallParam(String region, DescribeFirewallResult.FirewallData firewallData) {
+        super("CreateFirewall");
+        this.region = region;
+        this.rule = this.rule = firewallData
+                .getRule()
+                .parallelStream()
+                .map(rule ->
+                        new Rule(
+                                rule.getProtocolType(),
+                                rule.getDstPort(),
+                                rule.getSrcIP(),
+                                rule.getRuleAction(),
+                                rule.getPiority(),
+                                rule.getRemark()
+                        )
+                )
+                .collect(Collectors.toList());
     }
 
     public String getRegion() {
@@ -133,10 +156,17 @@ public class CreateFirewallParam extends BaseRequestParam {
         this.rule = rule;
     }
 
+    public void addRule(Rule rule){
+        this.rule.add(rule);
+    }
+
+    public void addRule(String protocol,String port,String ip,String action,String priority,String remark){
+        this.rule.add(new Rule(protocol,port,ip,action,priority,remark));
+    }
 
     public static class Rule {
         @SuppressWarnings("squid:S1170")
-        private final String ruleFormatWithPort = "%s|%d|%s|%s|%s";
+        private final String ruleFormatWithPort = "%s|%s|%s|%s|%s";
         @SuppressWarnings("squid:S1170")
         private final String ruleFormatWithoutPort = "%s||%s|%s|%s";
         @SuppressWarnings("squid:S1700")
@@ -150,7 +180,7 @@ public class CreateFirewallParam extends BaseRequestParam {
         /**
          * 端口号
          */
-        private Integer port;
+        private String port;
 
         /**
          * IP
@@ -167,8 +197,13 @@ public class CreateFirewallParam extends BaseRequestParam {
          */
         private String priority;
 
+        /**
+         * 用户备注
+         */
+        private String remark;
+
         public Rule(String protocol,
-                    Integer port,
+                    String port,
                     String ip,
                     String acceptOrNot,
                     String priority) {
@@ -177,13 +212,28 @@ public class CreateFirewallParam extends BaseRequestParam {
             this.ip = ip;
             this.acceptOrNot = acceptOrNot;
             this.priority = priority;
+            this.remark = "";
+        }
+
+        public Rule(String protocol,
+                    String port,
+                    String ip,
+                    String acceptOrNot,
+                    String priority,
+                    String remark) {
+            this.protocol = protocol;
+            this.port = port;
+            this.ip = ip;
+            this.acceptOrNot = acceptOrNot;
+            this.priority = priority;
+            this.remark = remark;
         }
 
         public String getRule() {
-            if (port == null){
-                rule = String.format(ruleFormatWithoutPort, protocol, ip, acceptOrNot, priority);
-            }else {
-                rule = String.format(ruleFormatWithPort, protocol, port, ip, acceptOrNot, priority);
+            if (port == null) {
+                rule = String.format(ruleFormatWithoutPort, protocol, ip, acceptOrNot, priority, remark);
+            } else {
+                rule = String.format(ruleFormatWithPort, protocol, port, ip, acceptOrNot, priority, remark);
             }
             return rule;
         }
@@ -196,11 +246,11 @@ public class CreateFirewallParam extends BaseRequestParam {
             this.protocol = protocol;
         }
 
-        public Integer getPort() {
+        public String getPort() {
             return port;
         }
 
-        public void setPort(Integer port) {
+        public void setPort(String port) {
             this.port = port;
         }
 
@@ -228,5 +278,12 @@ public class CreateFirewallParam extends BaseRequestParam {
             this.priority = priority;
         }
 
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
     }
 }
