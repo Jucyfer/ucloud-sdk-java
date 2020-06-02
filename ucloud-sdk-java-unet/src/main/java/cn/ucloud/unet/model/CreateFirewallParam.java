@@ -156,19 +156,17 @@ public class CreateFirewallParam extends BaseRequestParam {
         this.rule = rule;
     }
 
-    public void addRule(Rule rule){
+    public void addRule(Rule rule) {
         this.rule.add(rule);
     }
 
-    public void addRule(String protocol,String port,String ip,String action,String priority,String remark){
-        this.rule.add(new Rule(protocol,port,ip,action,priority,remark));
+    public void addRule(String protocol, String port, String ip, String action, String priority, String remark) {
+        this.rule.add(new Rule(protocol, port, ip, action, priority, remark));
     }
 
     public static class Rule {
         @SuppressWarnings("squid:S1170")
         private final String ruleFormatWithPort = "%s|%s|%s|%s|%s";
-        @SuppressWarnings("squid:S1170")
-        private final String ruleFormatWithoutPort = "%s||%s|%s|%s";
         @SuppressWarnings("squid:S1700")
         private String rule;
 
@@ -230,11 +228,7 @@ public class CreateFirewallParam extends BaseRequestParam {
         }
 
         public String getRule() {
-            if (port == null) {
-                rule = String.format(ruleFormatWithoutPort, protocol, ip, acceptOrNot, priority, remark);
-            } else {
-                rule = String.format(ruleFormatWithPort, protocol, port, ip, acceptOrNot, priority, remark);
-            }
+            rule = String.format(ruleFormatWithPort, protocol, port, ip, acceptOrNot, priority, remark);
             return rule;
         }
 
