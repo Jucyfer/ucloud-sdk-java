@@ -20,7 +20,7 @@ public class ModifyEIPBandwidthTest {
 
     @Before
     public void initData() {
-        client = new DefaultUnetClient(new UnetConfig(
+        client = UnetClients.getDefaultInstance(new UnetConfig(
                 new Account(System.getenv("UCloudPrivateKey"),
                         System.getenv("UCloudPublicKey"))));
         param = new ModifyEIPBandwidthParam("cn-sh2", "eip-vcsnbgi4", 4);

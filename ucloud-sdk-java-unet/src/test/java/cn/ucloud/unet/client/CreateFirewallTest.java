@@ -23,12 +23,12 @@ public class CreateFirewallTest {
 
     @Before
     public void initData() {
-        client = new DefaultUnetClient(new UnetConfig(
+        client = UnetClients.getDefaultInstance(new UnetConfig(
                 new Account(System.getenv("UCloudPrivateKey"),
                         System.getenv("UCloudPublicKey"))));
 
         List<CreateFirewallParam.Rule> rules = new ArrayList<>();
-        rules.add(new CreateFirewallParam.Rule("TCP", 22, "120.132.8.183", "ACCEPT", "LOW"));
+        rules.add(new CreateFirewallParam.Rule("TCP", "22", "120.132.8.183", "ACCEPT", "LOW","TEST_REMARK"));
         param = new CreateFirewallParam("cn-sh2", rules, "Firewall-test");
     }
 

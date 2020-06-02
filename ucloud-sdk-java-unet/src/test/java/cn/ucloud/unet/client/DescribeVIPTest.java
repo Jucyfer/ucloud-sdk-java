@@ -20,7 +20,7 @@ public class DescribeVIPTest {
 
     @Before
     public void initData() {
-        client = new DefaultUnetClient(new UnetConfig(
+        client = UnetClients.getDefaultInstance(new UnetConfig(
                 new Account(System.getenv("UCloudPrivateKey"),
                         System.getenv("UCloudPublicKey"))));
         param = new DescribeVIPParam("cn-sh2");

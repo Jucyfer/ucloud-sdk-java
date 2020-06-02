@@ -20,7 +20,7 @@ public class GetEIPUpgradePriceTest {
 
     @Before
     public void initData() {
-        client = new DefaultUnetClient(new UnetConfig(
+        client = UnetClients.getDefaultInstance(new UnetConfig(
                 new Account(System.getenv("UCloudPrivateKey"),
                         System.getenv("UCloudPublicKey"))));
         param = new GetEIPUpgradePriceParam("cn-sh2", "eip-vcsnbgi4", 10);

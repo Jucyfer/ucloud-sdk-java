@@ -20,7 +20,7 @@ public class AllocateEIPTest {
 
     @Before
     public void initData() {
-        client = new DefaultUnetClient(new UnetConfig(
+        client = UnetClients.getDefaultInstance(new UnetConfig(
                 new Account(System.getenv("UCloudPrivateKey"),
                         System.getenv("UCloudPublicKey"))));
         param = new AllocateEIPParam("cn-sh2", "Bgp", 2);
