@@ -1,6 +1,6 @@
 ## ucloud-sdk-java
 ucloud开发者工具套件（SDK）。<br/>
-<i>jyf-custom分支，二次开发自ucloud的0.8.3.0-release版本。</i><br/>
+<i>jyf-custom分支，基于ucloud主分支的0.8.3.0-release版本进行的二次开发。</i><br/>
 <b style="font-color: #FFF">不排除重构可能</b><br/>
 面向UCloud的多个产品服务，目前包括：
 - uhost

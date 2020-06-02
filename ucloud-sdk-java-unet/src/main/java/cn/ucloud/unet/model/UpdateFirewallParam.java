@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 /**
  * @description: 更新防火墙
- * @author: joshua
- * @E-mail: joshua.yin@ucloud.cn
+ * @author: joshua jucyfer
+ * @E-mail: joshua.yin@ucloud.cn 502223422@qq.com
  * @date: 2018/9/27 15:43
  */
 public class UpdateFirewallParam extends BaseRequestParam {

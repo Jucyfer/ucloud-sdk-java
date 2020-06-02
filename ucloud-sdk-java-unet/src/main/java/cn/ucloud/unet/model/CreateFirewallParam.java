@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 /**
  * @description: 创建防火墙  参数类
- * @author: joshua
- * @E-mail: joshua.yin@ucloud.cn
+ * @author: joshua jucyfer
+ * @E-mail: joshua.yin@ucloud.cn 502223422@qq.com
  * @date: 2018/9/27 11:31
  */
 public class CreateFirewallParam extends BaseRequestParam {
